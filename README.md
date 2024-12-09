@@ -1,74 +1,71 @@
-# Skillset Example
-
 > [!NOTE]
-> Copilot Extensions are in public preview and may be subject to change. Pre-release terms apply.
-> You must have a GitHub Copilot license of any type to use Copilot Extensions.
+> Copilot Extensions are in public preview and may be subject to change. Pre-release terms apply. You must have a GitHub Copilot license of any type to use Copilot Extensions.
 
-## Description
+# Skillset Example
+Learn to build a Copilot Extension as a skillset. Just define your API endpoints and let Copilot handle the complex AI logic. This sample demonstrates the lighter, faster alternative to building a traditional agent.
 
-This code sample demonstrates building a Copilot Extension using the skillsets approach rather than a traditional agent. This extension is designed to generate random test and example data for a number of development purposes, by calling publicly available APIs.
-
-### Architectural Model
+### Architecture
 - **Skillsets**: Define up to 5 API endpoints that Copilot can call directly. Copilot handles all AI interactions, prompt engineering, and response formatting.
 - **Agents**: Provide full control over the interaction flow, including custom prompt crafting and specific LLM model selection.
 
 ![Architectural comparison between Skillsets and Agents](https://github.com/user-attachments/assets/9c5d6489-afb5-47c2-be73-2561d89dfde3)
 
+### Key Differences
+|  | Skillsets | Agents |
+|--------|-----------|--------|
+| **Development Time** | Minutes to hours | Several days to weeks |
+| **Implementation** | Configure API endpoints only. Quicker if you have existing APIs. | Custom AI logic, prompt engineering, interaction handling. |
+| **Best For** | • Quick API integrations<br>• Basic service functionality<br>• Standard Copilot interactions<br>• Minimal infrastructure needs | • Complex interaction flows<br>• Custom LLM model control<br>• Custom prompt crafting<br>• Advanced state management |
+| **Control Level** | Copilot platform handles AI interactions | Full control over entire workflow |
+| **Data Volume** | Good for any volume, if the API handles efficient search/retrieval | Good for any volume, but requires robust search/retrieval at larger sizes |
 
-### When to Choose Skillsets
-Skillsets are ideal when you want to:
-- Quickly integrate existing APIs or services without managing AI logic
-- Focus purely on your service's core functionality
-- Maintain consistent Copilot-style interactions without extensive development
-- Get started with minimal infrastructure and setup
+## Example Prompts
 
-Use agents instead if you need:
-- Complex custom interaction flows
-- Specific LLM model control (using LLMs that aren't provided by the Copilot API)
-- Custom prompt crafting
-- Advanced state management
+This extension turns three public APIs into functions that can be used in Copilot Chat":
+```typescript
+@extension generate a commit message
+→ "Whatever will be, will be 8{)"
 
-## Example Implementation
+@extension generate 2 short lorem ipsum paragraphs
+→ [HTML-formatted Lorem Ipsum text]
 
-This extension showcases the skillset approach by providing three simple endpoints that generate random development data:
-- Random commit messages
-- Lorem ipsum text generation
-- Random user data
+@extension generate random user data
+→ {
+  "name": "Miss Mona",
+  "email": "mona.lisa@github.com",
+  ...
+}
+```
 
-## Getting Started
-1. Clone the repository: 
-
+## Quick Start
+### 1. Set Up Repository
 ```
 git clone git@github.com:copilot-extensions/skillset-example.git
 cd skillset-example
-```
-
-2. Install dependencies:
-
-```
 go mod tidy
 ```
 
-## Usage
-
-1. Start up ngrok with the port provided:
-
-```
-ngrok http http://localhost:8080
-```
-
-2. Set the environment variables (use the ngrok generated url for the `FDQN`)
-3. Run the application:
-
+### 2. Make It Accessible
+1. Run your app:
 ```
 go run .
 ```
 
-## Accessing the Extension in Chat:
+2. Then choose one method to expose it and copy the URL for your GitHub App config:
+* **VS Code**: Set port 8080 public, copy Local Address
+* **Codespaces**: Set port 8080 public, copy URL
+* **Local with ngrok**:
+  1. Install ngrok from ngrok.com
+  2. Start tunnel: `ngrok http 8080`
+  3. Copy the Forwarding URL
+ 
+> Note: This step is for development and testing only. For production use, deploy your extension to a public server with proper infrastructure and security.
 
-1. In the `Copilot` tab of your Application settings (`https://github.com/settings/apps/<app_name>/agent`)
-- Set the app type to "Skillset"
-- Specify the following skills
+### 3. Configure GitHub App
+1. Create a new GitHub App at `github.com/settings/apps/new` or go to an existing one
+2. In the Copilot tab:
+   - Set type to "Skillset"
+   - Define the three skills below, using your URL from step 2:
 ```
 Name: random_commit_message
 Inference description: Generates a random commit message
@@ -101,31 +98,16 @@ URL: https://<your ngrok domain>/random-user
 Parameters: { "type": "object" }
 Return type: String
 ```
+3. In the `General` tab of your GitHub App settings (`https://github.com/settings/apps/<app_name>`)
+   - **Homepage URL**: You can set to any URL for quick testing (like `https://github.com`).
+   - **Callback URL**: Only needed if your extension uses OAuth for authentication. Since this example doesn't use OAuth, set to any URL (like `https://github.com`)
+4. Ensure your permissions are enabled in `Permissions & events` > `Account Permissions` > `Copilot Chat` > `Access: Read Only`
+5. Install your app at `https://github.com/apps/<app_name>`
 
-2. In the `General` tab of your application settings (`https://github.com/settings/apps/<app_name>`)
-- Set the `Callback URL` to anything (`https://github.com` works well for testing, in a real environment, this would be a URL you control)
-- Set the `Homepage URL` to anything as above
-3. Ensure your permissions are enabled in `Permissions & events` > 
-- `Account Permissions` > `Copilot Chat` > `Access: Read Only`
-4. Ensure you install your application at (`https://github.com/apps/<app_name>`)
-5. Now if you go to `https://github.com/copilot` you can `@` your skillset extension using the name of your app.
-
-## What can the bot do?
-
-Here's some example things:
-
-* `@skillset-example please create a random commit message`
-* `@skillset-example generate a lorem ipsum`
-* `@skillset-example generate a short lorem ipsum with 3 paragraphs`
-* `@skillset-example generate random user data`
-
-## Implementation
-
-This bot provides a passthrough to a couple of other APIs:
-
-* For commit messages, https://whatthecommit.com/
-* For Lorem Ipsum, https://loripsum.net/
-* For user data, https://randomuser.me/
+### 4. Try It Out
+1. Open Copilot Chat on github.com or in any supported IDE
+3. Send a test prompt like `@test-data-bot generate a commit message`
+> Note: It may take a few seconds for your extension to appear. Try refreshing if needed.
 
 ## Documentation
 - [Using Copilot Extensions](https://docs.github.com/en/copilot/using-github-copilot/using-extensions-to-integrate-external-tools-with-copilot-chat)
