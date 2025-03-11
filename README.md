@@ -1,9 +1,5 @@
 # Skillset Example
 
-> [!NOTE]
-> Copilot Extensions are in public preview and may be subject to change. Pre-release terms apply.
-> You must have a GitHub Copilot license of any type to use Copilot Extensions.
-
 ## Description
 
 This code sample demonstrates building a Copilot Extension using the skillsets approach rather than a traditional agent. This extension is designed to generate random test and example data for a number of development purposes, by calling publicly available APIs.
