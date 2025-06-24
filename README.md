@@ -1,5 +1,7 @@
 # Skillset Example
 
+Hi!
+
 ## Description
 
 This code sample demonstrates building a Copilot Extension using the skillsets approach rather than a traditional agent. This extension is designed to generate random test and example data for a number of development purposes, by calling publicly available APIs.
