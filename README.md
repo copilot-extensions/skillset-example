@@ -1,22 +1,42 @@
-# Skills Example
-
-> [!NOTE]
-> To use Copilot Extensions, you must be enrolled in the limited public beta.
-> 
-> All enrolled users with a GitHub Copilot Individual subscription can use Copilot Extensions.
-> 
-> For enrolled organizations or enterprises with a Copilot Business or Copilot Enterprise subscription, organization owners and enterprise administrators can grant access to Copilot Extensions.
+# Skillset Example
 
 ## Description
 
-This is an example skills copilot extension, designed to create random data for a number of development purposes.  The purpose of this to showcase how an extension can be created using skills
+This code sample demonstrates building a Copilot Extension using the skillsets approach rather than a traditional agent. This extension is designed to generate random test and example data for a number of development purposes, by calling publicly available APIs.
 
-## Installation:
+### Architectural Model
+- **Skillsets**: Define up to 5 API endpoints that Copilot can call directly. Copilot handles all AI interactions, prompt engineering, and response formatting.
+- **Agents**: Provide full control over the interaction flow, including custom prompt crafting and specific LLM model selection.
+
+![Architectural comparison between Skillsets and Agents](https://github.com/user-attachments/assets/9c5d6489-afb5-47c2-be73-2561d89dfde3)
+
+
+### When to Choose Skillsets
+Skillsets are ideal when you want to:
+- Quickly integrate existing APIs or services without managing AI logic
+- Focus purely on your service's core functionality
+- Maintain consistent Copilot-style interactions without extensive development
+- Get started with minimal infrastructure and setup
+
+Use agents instead if you need:
+- Complex custom interaction flows
+- Specific LLM model control (using LLMs that aren't provided by the Copilot API)
+- Custom prompt crafting
+- Advanced state management
+
+## Example Implementation
+
+This extension showcases the skillset approach by providing three simple endpoints that generate random development data:
+- Random commit messages
+- Lorem ipsum text generation
+- Random user data
+
+## Getting Started
 1. Clone the repository: 
 
 ```
-git clone git@github.com:copilot-extensions/skills-example.git
-cd skills-example
+git clone git@github.com:copilot-extensions/skillset-example.git
+cd skillset-example
 ```
 
 2. Install dependencies:
@@ -40,11 +60,11 @@ ngrok http http://localhost:8080
 go run .
 ```
 
-## Accessing the Agent in Chat:
+## Accessing the Extension in Chat:
 
 1. In the `Copilot` tab of your Application settings (`https://github.com/settings/apps/<app_name>/agent`)
-- Set the app type to "Skill"
-- Add the following skills
+- Set the app type to "Skillset"
+- Specify the following skills
 ```
 Name: random_commit_message
 Inference description: Generates a random commit message
@@ -84,16 +104,16 @@ Return type: String
 3. Ensure your permissions are enabled in `Permissions & events` > 
 - `Account Permissions` > `Copilot Chat` > `Access: Read Only`
 4. Ensure you install your application at (`https://github.com/apps/<app_name>`)
-5. Now if you go to `https://github.com/copilot` you can `@` your agent using the name of your application.
+5. Now if you go to `https://github.com/copilot` you can `@` your skillset extension using the name of your app.
 
 ## What can the bot do?
 
 Here's some example things:
 
-* `@skills-example please create a random commit message`
-* `@skills-example generate a lorem ipsum`
-* `@skills-example generate a short lorem ipsum with 3 paragraphs`
-* `@skills-example generate random user data`
+* `@skillset-example please create a random commit message`
+* `@skillset-example generate a lorem ipsum`
+* `@skillset-example generate a short lorem ipsum with 3 paragraphs`
+* `@skillset-example generate random user data`
 
 ## Implementation
 
@@ -102,3 +122,9 @@ This bot provides a passthrough to a couple of other APIs:
 * For commit messages, https://whatthecommit.com/
 * For Lorem Ipsum, https://loripsum.net/
 * For user data, https://randomuser.me/
+
+## Documentation
+- [Using Copilot Extensions](https://docs.github.com/en/copilot/using-github-copilot/using-extensions-to-integrate-external-tools-with-copilot-chat)
+- [About skillsets](https://docs.github.com/en/copilot/building-copilot-extensions/building-a-copilot-skillset-for-your-copilot-extension/about-copilot-skillsets)
+- [About building Copilot Extensions](https://docs.github.com/en/copilot/building-copilot-extensions/about-building-copilot-extensions)
+- [Set up process](https://docs.github.com/en/copilot/building-copilot-extensions/setting-up-copilot-extensions)
